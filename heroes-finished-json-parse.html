@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Our superheroes</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Faster+One"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <header class="flex flex-col items-center bg-gray-100 p-6 opacity-50"></header>
+
+    <section
+      class="grid lg:grid-cols-3 gap-x-16 mx-4 items-center mt-5 md:grid-cols-2 sm:grid-cols-1"
+    ></section>
+
+    <script>
+      async function populate() {
+        const requestURL = "https://rickandmortyapi.com/api/character";
+        const request = new Request(requestURL);
+
+        const response = await fetch(request);
+        const rickAndMortyInfo = await response.text();
+
+        const characteres = JSON.parse(rickAndMortyInfo);
+        populateHeader(characteres.results);
+        populateHeroes(characteres.results);
+      }
+
+      function populateHeader(obj) {
+        const header = document.querySelector("header");
+        const myH1 = document.createElement("h1");
+        myH1.className="font-bold font-mono text-4xl"
+        myH1.textContent = "Rick And Morty API";
+        header.appendChild(myH1);
+
+        const myPara = document.createElement("p");
+        myPara.className="font-bold font-mono text-2xl"
+        myPara.textContent = `Characters`;
+        header.appendChild(myPara);
+      }
+
+      function populateHeroes(obj) {
+        const section = document.querySelector("section");
+        const characters = obj;
+        console.log(obj);
+        for (const character of characters) {
+          const myImg = document.createElement("img");
+          myImg.src = character.image;
+          myImg.className = "transition h-72 w-72 rounded-full transform hover:-translate-y-10 motion-reduce:transition-none motion-reduce:hover:transform-none";
+          const myArticle = document.createElement("article");
+          myArticle.className =
+            "flex flex-col items-center justify-items-center border py-20 mb-10 rounded-xl";
+          myArticle.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${character.image})`;
+          myArticle.style.backgroundRepeat = "no-repeat";
+          myArticle.style.backgroundSize = "cover"
+          myArticle.style.backgroundPosition= "center"
+
+          const myDiv = document.createElement("div");
+          myDiv.className = "mt-5 flex flex-col transition transform hover:-translate-y-10 motion-reduce:transition-none motion-reduce:hover:transform-none";
+          const myH2 = document.createElement("h2");
+          myH2.className="font-bold font-mono text-3xl"
+          const myPara1 = document.createElement("p");
+          myPara1.className="font-bold font-mono text-xl"
+          const myPara2 = document.createElement("p");
+          myPara2.className="font-bold font-mono text-xl"
+          const myPara3 = document.createElement("p");
+          myPara3.className="font-bold font-mono text-xl"
+          // const myList = document.createElement("ul");
+
+          myH2.textContent = character.name;
+          myPara1.textContent = `Estado: ${character.status}`;
+          myPara2.textContent = `Especie: ${character.species}`;
+          myPara3.textContent = `Genero: ${character.gender}`;
+
+          // const superPowers = hero.powers;
+          // for (const power of superPowers) {
+          //   const listItem = document.createElement("li");
+          //   listItem.textContent = power;
+          //   myList.appendChild(listItem);
+          // }
+          myArticle.appendChild(myImg);
+          myArticle.appendChild(myDiv);
+          myDiv.appendChild(myH2);
+          myDiv.appendChild(myPara1);
+          myDiv.appendChild(myPara2);
+          myDiv.appendChild(myPara3);
+          // myArticle.appendChild(myList);
+
+          section.appendChild(myArticle);
+        }
+      }
+
+      populate();
+    </script>
+  </body>
+</html>
